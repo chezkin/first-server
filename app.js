@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 
+const usersRoutes = require('./apiUsers/routesUsers');
+const articlesRoutes = require('./apiArticles/routesArticles');
+const categoriesRoutes = require('./apiCategories/routesCategories');
+
 app.use(morgan("dev"));
 
 app.use((req, res, next) => {
@@ -15,11 +19,18 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'OK'
-    });
-});
+app.use(express.json());
+
+app.use(express.urlencoded({
+    extended: false
+}));
+
+
+
+// Routes
+app.use('/articles', articlesRoutes);
+app.use('/categories', categoriesRoutes);
+app.use('/users', usersRoutes);
 
 
 app.use((req, res, next) => {
